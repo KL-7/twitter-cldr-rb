@@ -25,7 +25,7 @@ module TwitterCldr
         end
 
         def tailoring_data(locale)
-          TwitterCldr.get_resource(:collation, :tailoring, locale)
+          TwitterCldr.get_yaml_resource(:collation, :tailoring, locale)
         end
 
         private

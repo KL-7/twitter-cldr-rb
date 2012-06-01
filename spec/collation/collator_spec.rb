@@ -191,7 +191,7 @@ describe Collator do
 
   describe 'tailoring support' do
     before(:each) do
-      stub(TwitterCldr).get_resource(:collation, :tailoring, locale) { YAML.load(tailoring_resource_stub) }
+      stub(TwitterCldr).get_yaml_resource(:collation, :tailoring, locale) { YAML.load(tailoring_resource_stub) }
 
       mock(File).open(TrieBuilder::FRACTIONAL_UCA_SHORT_PATH, 'r') do |*args|
         args.last.call(fractional_uca_short_stub)

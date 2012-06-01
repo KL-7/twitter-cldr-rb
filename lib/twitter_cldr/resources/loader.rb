@@ -8,12 +8,12 @@ module TwitterCldr
 
     class Loader
 
-      def get_resource(*path)
+      def get_yaml_resource(*path)
         resources_cache[resource_file_path(path)]
       end
 
       def get_locale_resource(locale, resource_name)
-        get_resource(:locales, TwitterCldr.convert_locale(locale), resource_name)
+        get_yaml_resource(:locales, TwitterCldr.convert_locale(locale), resource_name)
       end
 
       private

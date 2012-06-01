@@ -87,12 +87,12 @@ describe TwitterCldr do
 
   let(:resources) { TwitterCldr::Resources::Loader.new }
 
-  describe '#get_resource' do
+  describe '#get_yaml_resource' do
     it 'delegates to resources' do
-      stub(resources).get_resource(:shared, :currencies) { 'result' }
+      stub(resources).get_yaml_resource(:shared, :currencies) { 'result' }
       stub(TwitterCldr).resources { resources }
 
-      TwitterCldr.get_resource(:shared, :currencies).should == 'result'
+      TwitterCldr.get_yaml_resource(:shared, :currencies).should == 'result'
     end
   end
 

@@ -123,7 +123,7 @@ describe CodePoint do
 
     context "with a stubbed decomposition map" do
       before(:each) do
-        mock(TwitterCldr).get_resource(:unicode_data, :canonical_compositions) { canonical_compositions }
+        mock(TwitterCldr).get_yaml_resource(:unicode_data, :canonical_compositions) { canonical_compositions }
       end
 
       it "should return a code point with the correct value" do
@@ -136,7 +136,7 @@ describe CodePoint do
     end
 
     it "should cache the decomposition map" do
-      mock(TwitterCldr).get_resource(:unicode_data, :canonical_compositions) { canonical_compositions }.once
+      mock(TwitterCldr).get_yaml_resource(:unicode_data, :canonical_compositions) { canonical_compositions }.once
       CodePoint.for_canonical_decomposition([0xA0]).should be_nil
       CodePoint.for_canonical_decomposition([0xA0]).should be_nil
     end
@@ -183,7 +183,7 @@ describe CodePoint do
 
   describe "#get_block" do
     it "finds the block that corresponds to the code point" do
-      stub(TwitterCldr).get_resource(:unicode_data, :blocks) { [[:klingon, 122..307], [:hirogen, 1337..2200]] }
+      stub(TwitterCldr).get_yaml_resource(:unicode_data, :blocks) { [[:klingon, 122..307], [:hirogen, 1337..2200]] }
       CodePoint.send(:get_block, 200).should  == [:klingon, 122..307]
       CodePoint.send(:get_block, 2199).should == [:hirogen, 1337..2200]
       CodePoint.send(:get_block, 100).should be_nil

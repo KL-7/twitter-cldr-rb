@@ -20,7 +20,7 @@ module TwitterCldr
         private
 
         def resource
-          @resource ||= TwitterCldr.get_resource(:shared, :phone_codes)
+          @resource ||= TwitterCldr.get_yaml_resource(:shared, :phone_codes)
         end
 
       end

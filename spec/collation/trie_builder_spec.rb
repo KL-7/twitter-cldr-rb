@@ -186,7 +186,7 @@ END
     let(:locale) { :fu }
 
     it 'loads tailoring data' do
-      mock(TwitterCldr).get_resource(:collation, :tailoring, locale) { tailoring_data }
+      mock(TwitterCldr).get_yaml_resource(:collation, :tailoring, locale) { tailoring_data }
       TrieBuilder.tailoring_data(locale).should == tailoring_data
     end
   end

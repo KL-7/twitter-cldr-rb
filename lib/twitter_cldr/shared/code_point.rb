@@ -61,7 +61,7 @@ module TwitterCldr
 
           return unless target && target.first
 
-          block_data      = TwitterCldr.get_resource(:unicode_data, :blocks, target.first)
+          block_data      = TwitterCldr.get_yaml_resource(:unicode_data, :blocks, target.first)
           code_point_data = block_data.fetch(code_point) { |cp| get_range_start(cp, block_data) }
 
           CodePoint.new(*code_point_data) if code_point_data
@@ -72,7 +72,7 @@ module TwitterCldr
         end
 
         def canonical_compositions
-          @canonical_compositions ||= TwitterCldr.get_resource(:unicode_data, :canonical_compositions)
+          @canonical_compositions ||= TwitterCldr.get_yaml_resource(:unicode_data, :canonical_compositions)
         end
 
         def hangul_type(code_point)
@@ -94,11 +94,11 @@ module TwitterCldr
         private
 
         def hangul_blocks
-          @hangul_blocks ||= TwitterCldr.get_resource(:unicode_data, :hangul_blocks)
+          @hangul_blocks ||= TwitterCldr.get_yaml_resource(:unicode_data, :hangul_blocks)
         end
 
         def composition_exclusions
-          @composition_exclusions ||= TwitterCldr.get_resource(:unicode_data, :composition_exclusions)
+          @composition_exclusions ||= TwitterCldr.get_yaml_resource(:unicode_data, :composition_exclusions)
         end
 
         def get_block(code_point)
@@ -106,7 +106,7 @@ module TwitterCldr
         end
 
         def blocks
-          TwitterCldr.get_resource(:unicode_data, :blocks)
+          TwitterCldr.get_yaml_resource(:unicode_data, :blocks)
         end
 
         # Check if block constitutes a range. The code point beginning a range will have a name enclosed in <>, ending with 'First'

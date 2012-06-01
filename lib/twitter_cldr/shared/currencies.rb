@@ -29,7 +29,7 @@ module TwitterCldr
         private
 
         def resource
-          @resource ||= TwitterCldr.get_resource(:shared, :currencies)
+          @resource ||= TwitterCldr.get_yaml_resource(:shared, :currencies)
         end
 
       end

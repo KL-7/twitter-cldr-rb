@@ -49,7 +49,7 @@ module TwitterCldr
   # maps cldr locales to twitter locales
   CLDR_LOCALE_MAP = TWITTER_LOCALE_MAP.invert
 
-  def_delegator :resources, :get_resource
+  def_delegator :resources, :get_yaml_resource
   def_delegator :resources, :get_locale_resource
 
   class << self
