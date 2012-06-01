@@ -15,12 +15,12 @@ describe Loader do
     let(:resource_content) { 'random YAML content' }
 
     it 'loads the correct YAML file' do
-      stub_resource_file(resource_path, "---\n- 1\n- 2\n")
+      stub_resource_file(resource_path) { "---\n- 1\n- 2\n" }
       loader.get_yaml_resource(:random, :resource).should == [1, 2]
     end
 
     it 'symbolizes hash keys' do
-      stub_resource_file(resource_path, "---\n:a:\n  :b: 3\n")
+      stub_resource_file(resource_path) { "---\n:a:\n  :b: 3\n" }
       loader.get_yaml_resource(:random, :resource).should == { :a => { :b => 3 } }
     end
 
@@ -55,8 +55,8 @@ describe Loader do
         mock(loader).read_resource_file('custom/foo/bar.yml') { ":bar: baz" }
 
         # make sure load_resource is called with custom = false the second time
-        mock.proxy(loader).load_resource("foo/bar.yml")
-        mock.proxy(loader).load_resource("custom/foo/bar.yml", false)
+        mock.proxy(loader).load_yml_resource("foo/bar.yml")
+        mock.proxy(loader).load_yml_resource("custom/foo/bar.yml", false)
 
         loader.get_yaml_resource(:foo, :bar).should == { :foo => "bar", :bar => "baz" }
       end
@@ -85,9 +85,36 @@ describe Loader do
     end
   end
 
-  def stub_resource_file(resource_path, content)
+  describe '#get_plain_resource' do
+    let(:resource_path) { 'pain/text.txt' }
+    let(:resource_content) { 'plain-text' }
+
+    it 'loads the correct file by string path' do
+      stub_resource_file(resource_path) { resource_content }
+      loader.get_plain_resource(resource_path).should == resource_content
+    end
+
+    it 'loads the resource only once' do
+      mock(loader).load_resource(resource_path).once { resource_content }
+
+      result = loader.get_plain_resource(resource_path)
+      result.should == resource_content
+      # second time load_resource is not called but we get the same object as before
+      loader.get_plain_resource(resource_path).object_id.should == result.object_id
+    end
+
+    it 'skips YAML parsing and deep keys symbolization' do
+      dont_allow(YAML).load
+      dont_allow(TwitterCldr::Utils).deep_symbolize_keys
+
+      stub_resource_file(resource_path) { resource_content }
+      loader.get_plain_resource(resource_path).should == resource_content
+    end
+  end
+
+  def stub_resource_file(resource_path, &block)
     file_path = File.join(TwitterCldr::RESOURCES_DIR, resource_path)
-    stub(File).read(file_path) { content }
+    stub(File).read(file_path, &block)
     stub(File).file?(file_path) { true }
   end
 

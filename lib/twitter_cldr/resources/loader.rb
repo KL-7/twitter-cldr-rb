@@ -8,8 +8,12 @@ module TwitterCldr
 
     class Loader
 
-      def get_yaml_resource(*path)
+      def get_plain_resource(path)
         resources_cache[resource_file_path(path)]
+      end
+
+      def get_yaml_resource(*path)
+        resources_cache[resource_file_path(path, '.yml')]
       end
 
       def get_locale_resource(locale, resource_name)
@@ -22,19 +26,23 @@ module TwitterCldr
         @resources_cache ||= Hash.new { |hash, path| hash[path] = load_resource(path) }
       end
 
-      def resource_file_path(path)
-        "#{File.join(*path.map(&:to_s))}.yml"
+      def resource_file_path(path, extension = nil)
+        [File.join(*Array(path).map(&:to_s)), extension.to_s].join
       end
 
-      def load_resource(path, merge_custom = true)
-        base = YAML.load(read_resource_file(path))
-        custom_path = File.join("custom", path)
+      def load_resource(path)
+        File.extname(path) == '.yml' ? load_yml_resource(path) : read_resource_file(path)
+      end
 
-        if merge_custom && resource_exists?(custom_path)
-          TwitterCldr::Utils.deep_merge!(base, load_resource(custom_path, false))
+      def load_yml_resource(path, merge_custom_yml = true)
+        data = YAML.load(read_resource_file(path))
+        custom_path = File.join('custom', path)
+
+        if merge_custom_yml && resource_exists?(custom_path)
+          TwitterCldr::Utils.deep_merge!(data, load_yml_resource(custom_path, false))
         end
 
-        base
+        data
       end
 
       def resource_exists?(path)
