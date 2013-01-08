@@ -20,6 +20,13 @@ task :default => :spec
 desc 'Run specs'
 RSpec::Core::RakeTask.new do |t|
   t.pattern = './spec/**/*_spec.rb'
+
+  case ENV['SLOW_SPEC']
+    when 'true'
+      t.rspec_opts = '--tag slow'
+    when 'false'
+      t.rspec_opts = '--tag ~slow'
+  end
 end
 
 namespace :spec do
